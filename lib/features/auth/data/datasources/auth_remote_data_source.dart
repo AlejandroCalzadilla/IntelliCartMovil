@@ -14,22 +14,31 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<(UserModel, String)> login(String email, String password) async {
-    final response = await apiClient.post(
-      '/login',
-      body: {
-        'email': email,
-        'password': password,
-      },
-    );
+    print('AuthRemoteDataSourceImpl: Starting login for email: $email');
+    try {
+      final response = await apiClient.post(
+        '/login',
+        body: {
+          'email': email,
+          'password': password,
+        },
+      );
 
-    final data = jsonDecode(response.body);
-    
-    // Mapea la estructura típica de Laravel Sanctum: { "user": {...}, "token": "..." }
-    final userJson = data['user'] ?? data;
-    final String token = (data['token'] ?? data['access_token'] ?? '').toString();
-    
-    final user = UserModel.fromJson(userJson);
-    return (user, token);
+      final data = jsonDecode(response.body);
+      print('AuthRemoteDataSourceImpl: Decoded response JSON: $data');
+      
+      final userJson = data['user'] ?? data;
+      final String token = (data['token'] ?? data['access_token'] ?? '').toString();
+      
+      print('AuthRemoteDataSourceImpl: Token extracted: "$token"');
+      
+      final user = UserModel.fromJson(userJson);
+      print('AuthRemoteDataSourceImpl: UserModel successfully instantiated. User: ${user.name}');
+      return (user, token);
+    } catch (e) {
+      print('AuthRemoteDataSourceImpl: Error occurred during login process: $e');
+      rethrow;
+    }
   }
 
   @override

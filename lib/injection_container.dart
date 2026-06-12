@@ -53,6 +53,7 @@ Future<void> init() async {
   sl.registerFactory(() => AssistantCubit(
         sendMessageUseCase: sl(),
         getHistoryUseCase: sl(),
+        apiClient: sl(),
       ));
 
   // Use cases

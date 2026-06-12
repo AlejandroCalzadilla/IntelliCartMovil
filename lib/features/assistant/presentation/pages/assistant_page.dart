@@ -301,7 +301,7 @@ class _AssistantPageState extends State<AssistantPage> with SingleTickerProvider
                         height: 1.4,
                       ),
                     ),
-                    if (message.audioUrl != null) ...[
+                    if (!isUser) ...[
                       const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
